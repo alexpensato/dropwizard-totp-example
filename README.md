@@ -1,18 +1,23 @@
-# dropwizard-totp-example-with-jchambers
-Dropwizard TOTP Authentication example using jchambers library
+# dropwizard-totp-example
+Dropwizard TOTP Authenticator example
 
 Introduction
 ---
-This is a simple example of how to use the jchambers library to implement TOTP authentication 
-in a Dropwizard application.
+This is a simple example of how to implement TOTP authenticator in a Dropwizard application, 
+including a simple web page to generate QR-Code for the TOTP authenticator.
 
+It uses code from the jchambers project.
 The official jchambers library can be found here: https://github.com/jchambers/java-otp
+
+It also uses Google's xzingorg library for QR-Code generation.
+The official xzing library can be found here: https://github.com/zxing/zxing/wiki/Getting-Started-Developing
+
 
 How to start the application
 ---
 
 1. Run `mvn clean install` to build your application
-1. Start application with `java -jar target/dropwiztotpjclib-1.0-SNAPSHOT.jar`
+1. Start application with `java -jar target/dropwiztotp-1.0-SNAPSHOT.jar`
 1. To check that your application is running enter url `http://localhost:8080`
 
 
@@ -45,8 +50,3 @@ https://www.dropwizard.io/en/latest/manual/core.html
 https://www.dropwizard.io/en/latest/manual/configuration.html
 https://www.dropwizard.io/en/latest/manual/core.html#filters
 
-Guicey:
-https://mvnrepository.com/artifact/ru.vyarus/dropwizard-guicey/5.9.0
-https://xvik.github.io/dropwizard-guicey/5.9.0/getting-started/
-https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/examples/core-getting-started
-https://xvik.github.io/dropwizard-guicey/5.9.0/getting-started/#adding-a-filter
