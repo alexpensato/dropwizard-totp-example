@@ -4,10 +4,6 @@ public class PersonalData {
     private String name;
     private String email;
 
-    public PersonalData() {
-        super();
-    }
-
     public PersonalData(String name, String email) {
         this.name = name;
         this.email = email;

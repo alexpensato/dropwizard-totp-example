@@ -1,16 +1,15 @@
 package com.pensatocode.example.model;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+
 public class Credential {
     private String username;
-    private String secretKey;
+    private Key secret;
 
-    public Credential() {
-        super();
-    }
-
-    public Credential(String username, String secretKey) {
+    public Credential(String username, Key secret) {
         this.username = username;
-        this.secretKey = secretKey;
+        this.secret = secret;
     }
 
     // getters and setters
@@ -22,19 +21,19 @@ public class Credential {
         this.username = username;
     }
 
-    public String getSecretKey() {
-        return secretKey;
+    public Key getSecret() {
+        return secret;
     }
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
+    public void setSecret(Key secret) {
+        this.secret = secret;
     }
 
     @Override
     public String toString() {
         return "Credentials{" +
                 "username='" + username + '\'' +
-                ", secretKey='" + secretKey + '\'' +
+                ", secret='" + new String(secret.getEncoded(), StandardCharsets.UTF_8) + '\'' +
                 '}';
     }
 }

@@ -12,6 +12,12 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class LoopbackResource {
 
+    private final int defaultSize;
+
+    public LoopbackResource(int defaultSize) {
+        this.defaultSize = defaultSize;
+    }
+
     @GET
     @Path("/")
     public Response ask(@Context HttpServletRequest request) {

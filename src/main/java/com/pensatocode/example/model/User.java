@@ -6,10 +6,6 @@ public class User {
     private PersonalData personalData;
     private Credential credential;
 
-    public User() {
-        super();
-    }
-
     public User(Long id, PersonalData personalData, Credential credential) {
         this.id = id;
         this.personalData = personalData;

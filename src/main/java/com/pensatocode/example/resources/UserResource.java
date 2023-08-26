@@ -1,5 +1,6 @@
 package com.pensatocode.example.resources;
 
+import com.pensatocode.example.db.UserRepository;
 import com.pensatocode.example.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +15,10 @@ public class UserResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
 
-    private final int defaultSize;
+    private final UserRepository userRepository;
 
-    public UserResource(int defaultSize) {
-        this.defaultSize = defaultSize;
+    public UserResource(UserRepository userRepository) {
+        this.userRepository = userRepository;
         LOGGER.info("############## UserResource Constructor ##############");
     }
 

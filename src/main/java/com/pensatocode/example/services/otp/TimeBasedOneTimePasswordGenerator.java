@@ -94,7 +94,7 @@ public class TimeBasedOneTimePasswordGenerator {
      * 6 and 8, inclusive
      */
     public TimeBasedOneTimePasswordGenerator(final Duration timeStep, final int passwordLength) {
-        this(timeStep, passwordLength, TOTP_ALGORITHM_HMAC_SHA1);
+        this(timeStep, passwordLength, TOTP_ALGORITHM_HMAC_SHA512);
     }
 
     /**

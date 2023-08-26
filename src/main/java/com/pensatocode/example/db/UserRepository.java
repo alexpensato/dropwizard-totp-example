@@ -2,7 +2,9 @@ package com.pensatocode.example.db;
 
 import com.pensatocode.example.client.UserBootstrap;
 import com.pensatocode.example.model.User;
+import com.pensatocode.example.services.SecretKeyGenerator;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,9 +12,10 @@ import java.util.stream.Collectors;
 public class UserRepository {
     private final List<User> users;
 
-    public UserRepository() {
+    @Inject
+    public UserRepository(SecretKeyGenerator secretKeyGenerator) {
         super();
-        this.users = UserBootstrap.initUsers();
+        this.users = UserBootstrap.initUsers(secretKeyGenerator);
     }
 
     public List<User> findAll(int size) {

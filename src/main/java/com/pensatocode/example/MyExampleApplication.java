@@ -1,8 +1,11 @@
 package com.pensatocode.example;
 
+import com.pensatocode.example.db.UserRepository;
 import com.pensatocode.example.health.ApplicationHealthCheck;
 import com.pensatocode.example.resources.LoopbackResource;
 import com.pensatocode.example.resources.UserResource;
+import com.pensatocode.example.services.SecretKeyGenerator;
+import com.pensatocode.example.services.otp.TimeBasedOneTimePasswordGenerator;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -46,9 +49,13 @@ public class MyExampleApplication extends io.dropwizard.Application<BasicConfigu
     public void run(final BasicConfiguration configuration, final Environment environment) {
         // health checks
         environment.healthChecks().register("application", new ApplicationHealthCheck());
+        // support classes
+        TimeBasedOneTimePasswordGenerator totp = new TimeBasedOneTimePasswordGenerator();
+        SecretKeyGenerator secretKeyGenerator = new SecretKeyGenerator(totp);
+        UserRepository userRepository = new UserRepository(secretKeyGenerator);
         // register resources
-        environment.jersey().register(new LoopbackResource());
-        environment.jersey().register(new UserResource(configuration.getDefaultSize()));
+        environment.jersey().register(new LoopbackResource(configuration.getDefaultSize()));
+        environment.jersey().register(new UserResource(userRepository));
     }
 
 }
