@@ -9,7 +9,7 @@ including a simple web page to generate QR-Code for the TOTP authenticator.
 It uses code from the jchambers project.
 The official jchambers library can be found here: https://github.com/jchambers/java-otp
 
-It also uses Google's xzingorg library for QR-Code generation.
+It also uses Google's xzing library for QR-Code generation.
 The official xzing library can be found here: https://github.com/zxing/zxing/wiki/Getting-Started-Developing
 
 
@@ -17,8 +17,8 @@ How to start the application
 ---
 
 1. Run `mvn clean install` to build your application
-1. Start application with `java -jar target/dropwiztotp-1.0-SNAPSHOT.jar`
-1. To check that your application is running enter url `http://localhost:8080`
+2. Start application with `java -jar target/dropwiztotp-1.0-SNAPSHOT.jar`
+3. To check that your application is running enter url `http://localhost:8080`
 
 
 Troubleshooting
