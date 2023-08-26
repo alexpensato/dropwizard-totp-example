@@ -1,15 +1,16 @@
 package com.pensatocode.example.model;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
+
+import java.util.Arrays;
 
 public class Credential {
     private String username;
-    private Key secret;
+    private GoogleAuthenticatorKey secretKey;
 
-    public Credential(String username, Key secret) {
+    public Credential(String username, GoogleAuthenticatorKey secretKey) {
         this.username = username;
-        this.secret = secret;
+        this.secretKey = secretKey;
     }
 
     // getters and setters
@@ -21,19 +22,23 @@ public class Credential {
         this.username = username;
     }
 
-    public Key getSecret() {
-        return secret;
+    public GoogleAuthenticatorKey getSecretKey() {
+        return secretKey;
     }
 
-    public void setSecret(Key secret) {
-        this.secret = secret;
+    public void setSecretKey(GoogleAuthenticatorKey secretKey) {
+        this.secretKey = secretKey;
     }
 
     @Override
     public String toString() {
         return "Credentials{" +
                 "username='" + username + '\'' +
-                ", secret='" + new String(secret.getEncoded(), StandardCharsets.UTF_8) + '\'' +
+                ", algorithm='" + secretKey.getConfig().getHmacHashFunction().name() + '\'' +
+                ", secret_key='" + secretKey.getKey() + '\'' +
+                ", verification_code='" + secretKey.getVerificationCode() + '\'' +
+                ", scratch_codes='" + Arrays.toString(secretKey.getScratchCodes().toArray()) + '\'' +
                 '}';
     }
+
 }

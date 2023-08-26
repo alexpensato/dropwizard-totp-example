@@ -6,8 +6,8 @@ Introduction
 This is a simple example of how to implement TOTP authenticator in a Dropwizard application, 
 including a simple web page to generate QR-Code for the TOTP authenticator.
 
-It uses code from the jchambers project.
-The official jchambers library can be found here: https://github.com/jchambers/java-otp
+This example uses the wstrange's GoogleAuth library.
+The official repository for this library can be found here: https://github.com/wstrange/GoogleAuth
 
 It also uses Google's xzing library for QR-Code generation.
 The official xzing library can be found here: https://github.com/zxing/zxing/wiki/Getting-Started-Developing

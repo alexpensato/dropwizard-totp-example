@@ -1,21 +1,17 @@
 package com.pensatocode.example.db;
 
-import com.pensatocode.example.client.UserBootstrap;
 import com.pensatocode.example.model.User;
-import com.pensatocode.example.services.SecretKeyGenerator;
+import com.warrenstrange.googleauth.ICredentialRepository;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class UserRepository {
-    private final List<User> users;
+public class UserRepository implements ICredentialRepository {
+    private List<User> users;
 
-    @Inject
-    public UserRepository(SecretKeyGenerator secretKeyGenerator) {
-        super();
-        this.users = UserBootstrap.initUsers(secretKeyGenerator);
+    public void loadAllUser(List<User> users) {
+        this.users = users;
     }
 
     public List<User> findAll(int size) {
@@ -36,4 +32,18 @@ public class UserRepository {
                 .findFirst();
     }
 
+    @Override
+    public String getSecretKey(String username) {
+        return findByUsername(username)
+                .map(user -> user.getCredentials().getSecretKey().getKey())
+                .orElse(null);
+    }
+
+    @Override
+    public void saveUserCredentials(String userName,
+                                    String secretKey,
+                                    int validationCode,
+                                    List<Integer> scratchCodes) {
+
+    }
 }

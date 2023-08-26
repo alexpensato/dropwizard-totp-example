@@ -20,8 +20,6 @@
 
 package com.pensatocode.example.services.otp;
 
-import com.pensatocode.example.services.otp.exception.UncheckedNoSuchAlgorithmException;
-
 import javax.crypto.Mac;
 import javax.crypto.ShortBufferException;
 import java.nio.ByteBuffer;
@@ -38,37 +36,22 @@ import java.util.Locale;
 public class HmacOneTimePasswordGenerator {
     private final Mac prototypeMac;
     private final int passwordLength;
-
     private final int modDivisor;
-
     private final String formatString;
 
     /**
-     * The default length, in decimal digits, for one-time passwords.
+     * The default length, in decimal digits, for one-time passwords (OTP).
      */
     public static final int DEFAULT_PASSWORD_LENGTH = 6;
 
-    /**
-     * The HMAC algorithm specified by the HOTP standard.
-     */
-    static final String HOTP_HMAC_ALGORITHM = "HmacSHA1";
 
     /**
-     * Creates a new HMAC-based one-time password (HOTP) generator using a default password length
-     * ({@value com.pensatocode.example.services.otp.HmacOneTimePasswordGenerator#DEFAULT_PASSWORD_LENGTH} digits).
-     */
-    public HmacOneTimePasswordGenerator() {
-        this(DEFAULT_PASSWORD_LENGTH);
-    }
-
-    /**
-     * Creates a new HMAC-based one-time password (HOTP) generator using the given password length.
+     * <p>Creates a new HMAC-based one-time password (HOTP) generator using the given algorithm.
      *
-     * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
-     * 6 and 8, inclusive
+     * @param algorithm the name of the {@link Mac} algorithm to use when generating passwords.
      */
-    public HmacOneTimePasswordGenerator(final int passwordLength) {
-        this(passwordLength, HOTP_HMAC_ALGORITHM);
+    public HmacOneTimePasswordGenerator(final String algorithm) throws NoSuchAlgorithmException {
+        this(DEFAULT_PASSWORD_LENGTH, algorithm);
     }
 
     /**
@@ -78,29 +61,16 @@ public class HmacOneTimePasswordGenerator {
      *
      * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
      * 6 and 8, inclusive
-     * @param algorithm the name of the {@link Mac} algorithm to use when generating passwords; note that
-     * HOTP only allows for {@value com.pensatocode.example.services.otp.HmacOneTimePasswordGenerator#HOTP_HMAC_ALGORITHM}, but derived
-     * standards like TOTP may allow for other algorithms
-     *
-     * @throws UncheckedNoSuchAlgorithmException if the given algorithm is not supported by the underlying JRE
+     * @param algorithm the name of the {@link Mac} algorithm to use when generating passwords.
      */
-    HmacOneTimePasswordGenerator(final int passwordLength, final String algorithm) throws UncheckedNoSuchAlgorithmException {
-        try {
-            this.prototypeMac = Mac.getInstance(algorithm);
-        } catch (final NoSuchAlgorithmException e) {
-            throw new UncheckedNoSuchAlgorithmException(e);
-        }
+    HmacOneTimePasswordGenerator(final int passwordLength, final String algorithm) throws NoSuchAlgorithmException {
+
+        this.prototypeMac = Mac.getInstance(algorithm);
 
         switch (passwordLength) {
             case 6: {
                 this.modDivisor = 1_000_000;
                 this.formatString = "%06d";
-                break;
-            }
-
-            case 7: {
-                this.modDivisor = 10_000_000;
-                this.formatString = "%07d";
                 break;
             }
 
@@ -111,7 +81,7 @@ public class HmacOneTimePasswordGenerator {
             }
 
             default: {
-                throw new IllegalArgumentException("Password length must be between 6 and 8 digits.");
+                throw new IllegalArgumentException("Password length must be 6 or 8 digits.");
             }
         }
 

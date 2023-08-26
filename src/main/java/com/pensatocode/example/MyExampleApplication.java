@@ -1,11 +1,13 @@
 package com.pensatocode.example;
 
+import com.pensatocode.example.client.UserBootstrap;
 import com.pensatocode.example.db.UserRepository;
 import com.pensatocode.example.health.ApplicationHealthCheck;
 import com.pensatocode.example.resources.LoopbackResource;
 import com.pensatocode.example.resources.UserResource;
 import com.pensatocode.example.services.SecretKeyGenerator;
-import com.pensatocode.example.services.otp.TimeBasedOneTimePasswordGenerator;
+import com.pensatocode.example.services.qrcode.QRCodeGenerator;
+import com.pensatocode.example.services.qrcode.QRCodeGeneratorImpl;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -32,11 +34,6 @@ public class MyExampleApplication extends io.dropwizard.Application<BasicConfigu
     @Override
     public void initialize(final Bootstrap<BasicConfiguration> bootstrap) {
         bootstrap.setConfigurationSourceProvider(new ResourceConfigurationSourceProvider());
-
-//        bootstrap.addBundle(GuiceBundle.builder()
-//                .enableAutoConfig("com.pensatocode.example.resources", "com.pensatocode.example.db")
-//                .build());
-
         super.initialize(bootstrap);
     }
 
@@ -50,12 +47,13 @@ public class MyExampleApplication extends io.dropwizard.Application<BasicConfigu
         // health checks
         environment.healthChecks().register("application", new ApplicationHealthCheck());
         // support classes
-        TimeBasedOneTimePasswordGenerator totp = new TimeBasedOneTimePasswordGenerator();
-        SecretKeyGenerator secretKeyGenerator = new SecretKeyGenerator(totp);
-        UserRepository userRepository = new UserRepository(secretKeyGenerator);
+        UserRepository userRepository = new UserRepository();
+        SecretKeyGenerator secretKeyGenerator = new SecretKeyGenerator(userRepository);
+        userRepository.loadAllUser(UserBootstrap.initUsers(secretKeyGenerator));
+        QRCodeGenerator qrCodeGenerator = new QRCodeGeneratorImpl();
         // register resources
         environment.jersey().register(new LoopbackResource(configuration.getDefaultSize()));
-        environment.jersey().register(new UserResource(userRepository));
+        environment.jersey().register(new UserResource(userRepository, qrCodeGenerator));
     }
 
 }

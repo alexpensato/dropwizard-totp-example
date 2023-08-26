@@ -20,11 +20,10 @@
 
 package com.pensatocode.example.services.otp;
 
-import com.pensatocode.example.services.otp.exception.UncheckedNoSuchAlgorithmException;
-
 import javax.crypto.Mac;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Locale;
@@ -49,77 +48,35 @@ public class TimeBasedOneTimePasswordGenerator {
     public static final Duration DEFAULT_TIME_STEP = Duration.ofSeconds(30);
 
     /**
-     * A string identifier for the HMAC-SHA1 algorithm; HMAC-SHA1 is the default algorithm for TOTP.
+     * A string identifier for the HMAC-SHA512 algorithm.
      */
-    public static final String TOTP_ALGORITHM_HMAC_SHA1 = "HmacSHA1";
-
-    /**
-     * A string identifier for the HMAC-SHA256 algorithm.
-     */
-    @SuppressWarnings("unused")
     public static final String TOTP_ALGORITHM_HMAC_SHA256 = "HmacSHA256";
 
     /**
-     * A string identifier for the HMAC-SHA512 algorithm.
+     * Constructs a new time-based one-time password generator with a default time-step (30 seconds),
+     * password length, and HMAC algorithm
      */
-    @SuppressWarnings("unused")
-    public static final String TOTP_ALGORITHM_HMAC_SHA512 = "HmacSHA512";
-
-    /**
-     * Constructs a new time-based one-time password generator with a default time-step (30 seconds), password length
-     * ({@value com.pensatocode.example.services.otp.HmacOneTimePasswordGenerator#DEFAULT_PASSWORD_LENGTH} decimal digits), and HMAC
-     * algorithm ({@value com.pensatocode.example.services.otp.HmacOneTimePasswordGenerator#HOTP_HMAC_ALGORITHM}).
-     */
-    public TimeBasedOneTimePasswordGenerator() {
-        this(DEFAULT_TIME_STEP);
+    public TimeBasedOneTimePasswordGenerator() throws NoSuchAlgorithmException {
+        this(DEFAULT_TIME_STEP, TOTP_ALGORITHM_HMAC_SHA256);
     }
 
-    /**
-     * Constructs a new time-based one-time password generator with the given time-step and a default password length
-     * ({@value com.pensatocode.example.services.otp.HmacOneTimePasswordGenerator#DEFAULT_PASSWORD_LENGTH} decimal digits) and HMAC
-     * algorithm ({@value com.pensatocode.example.services.otp.HmacOneTimePasswordGenerator#HOTP_HMAC_ALGORITHM}).
-     *
-     * @param timeStep the time-step for this generator
-     */
-    public TimeBasedOneTimePasswordGenerator(final Duration timeStep) {
-        this(timeStep, HmacOneTimePasswordGenerator.DEFAULT_PASSWORD_LENGTH);
-    }
-
-    /**
-     * Constructs a new time-based one-time password generator with the given time-step and password length and a
-     * default HMAC algorithm ({@value com.pensatocode.example.services.otp.HmacOneTimePasswordGenerator#HOTP_HMAC_ALGORITHM}).
-     *
-     * @param timeStep the time-step for this generator
-     * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
-     * 6 and 8, inclusive
-     */
-    public TimeBasedOneTimePasswordGenerator(final Duration timeStep, final int passwordLength) {
-        this(timeStep, passwordLength, TOTP_ALGORITHM_HMAC_SHA512);
-    }
 
     /**
      * Constructs a new time-based one-time password generator with the given time-step, password length, and HMAC
      * algorithm.
      *
      * @param timeStep the time-step for this generator
-     * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
-     * 6 and 8, inclusive
-     * @param algorithm the name of the {@link Mac} algorithm to use when generating passwords; TOTP allows
-     * for {@value #TOTP_ALGORITHM_HMAC_SHA1}, {@value #TOTP_ALGORITHM_HMAC_SHA256}, and
-     * {@value #TOTP_ALGORITHM_HMAC_SHA512}
+     * @param algorithm the name of the {@link Mac} algorithm to use when generating passwords
      *
-     * @throws UncheckedNoSuchAlgorithmException if the given algorithm is {@value #TOTP_ALGORITHM_HMAC_SHA512} and the
-     * JVM does not support that algorithm; all JVMs are required to support {@value #TOTP_ALGORITHM_HMAC_SHA1} and
-     * {@value #TOTP_ALGORITHM_HMAC_SHA256}, but are not required to support {@value #TOTP_ALGORITHM_HMAC_SHA512}
+     * @throws NoSuchAlgorithmException if the given algorithm is HmacSHA512 and the
+     * JVM does not support that algorithm; all JVMs are required to support HMAC_SHA1 and
+     * SHA256, but are not required to support HMAC_SHA512
      *
-     * @see #TOTP_ALGORITHM_HMAC_SHA1
      * @see #TOTP_ALGORITHM_HMAC_SHA256
-     * @see #TOTP_ALGORITHM_HMAC_SHA512
      */
-    public TimeBasedOneTimePasswordGenerator(final Duration timeStep, final int passwordLength, final String algorithm)
-            throws UncheckedNoSuchAlgorithmException {
-
-        this.hotp = new HmacOneTimePasswordGenerator(passwordLength, algorithm);
+    public TimeBasedOneTimePasswordGenerator(final Duration timeStep, final String algorithm)
+            throws NoSuchAlgorithmException {
+        this.hotp = new HmacOneTimePasswordGenerator(algorithm);
         this.timeStep = timeStep;
     }
 
