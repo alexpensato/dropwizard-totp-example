@@ -4,16 +4,16 @@ public class User {
 
     private Long id;
     private PersonalData personalData;
-    private Credentials credentials;
+    private Credential credential;
 
     public User() {
         super();
     }
 
-    public User(Long id, PersonalData personalData, Credentials credentials) {
+    public User(Long id, PersonalData personalData, Credential credential) {
         this.id = id;
         this.personalData = personalData;
-        this.credentials = credentials;
+        this.credential = credential;
     }
 
     // getters and setters
@@ -33,19 +33,19 @@ public class User {
         this.personalData = personalData;
     }
 
-    public Credentials getCredentials() {
-        return credentials;
+    public Credential getCredentials() {
+        return credential;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public void setCredentials(Credential credential) {
+        this.credential = credential;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "personalData=" + personalData +
-                ", credentials=" + credentials +
+                ", credentials=" + credential +
                 '}';
     }
 }

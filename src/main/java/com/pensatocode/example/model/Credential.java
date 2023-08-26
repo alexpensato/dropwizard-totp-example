@@ -1,14 +1,14 @@
 package com.pensatocode.example.model;
 
-public class Credentials {
+public class Credential {
     private String username;
     private String secretKey;
 
-    public Credentials() {
+    public Credential() {
         super();
     }
 
-    public Credentials(String username, String secretKey) {
+    public Credential(String username, String secretKey) {
         this.username = username;
         this.secretKey = secretKey;
     }
